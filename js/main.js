@@ -63,10 +63,41 @@
         
         handleReveal();
 
-        // --- Formulario Netlify Forms ---
+        // --- Formulario Netlify Forms con Modal ---
         const contactForm = document.getElementById('contactForm');
-        const msgStatus = document.getElementById('msg-status');
+        const successModal = document.getElementById('successModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
 
+        // Función para mostrar el modal
+        function showModal() {
+            successModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevenir scroll
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            successModal.classList.add('closing');
+            setTimeout(() => {
+                successModal.classList.remove('active', 'closing');
+                document.body.style.overflow = 'auto'; // Restaurar scroll
+            }, 300);
+        }
+
+        // Event listener para cerrar modal mediante botón
+        closeModalBtn.addEventListener('click', closeModal);
+
+        // Cerrar modal al hacer clic en el overlay
+        const modalOverlay = successModal.querySelector('.modal-overlay');
+        modalOverlay.addEventListener('click', closeModal);
+
+        // Cerrar modal con tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && successModal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Enviar formulario a Netlify
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -80,19 +111,14 @@
                 body: new URLSearchParams(formData).toString()
             })
             .then(() => {
-                // Mostrar mensaje de éxito
-                msgStatus.style.display = 'block';
-                contactForm.reset();
+                // Mostrar modal de éxito
+                showModal();
                 
-                // Ocultar el mensaje después de 4 segundos
-                setTimeout(() => {
-                    msgStatus.style.display = 'none';
-                }, 4000);
+                // Limpiar campos del formulario
+                contactForm.reset();
             })
             .catch(error => {
                 console.error('Error al enviar formulario:', error);
-                msgStatus.textContent = 'Error al enviar. Intenta de nuevo.';
-                msgStatus.style.color = 'var(--primary-color)';
-                msgStatus.style.display = 'block';
+                alert('Error al enviar. Intenta de nuevo.');
             });
         });
