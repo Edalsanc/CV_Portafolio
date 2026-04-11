@@ -63,12 +63,36 @@
         
         handleReveal();
 
-        // --- Formulario ---
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
+        // --- Formulario Netlify Forms ---
+        const contactForm = document.getElementById('contactForm');
+        const msgStatus = document.getElementById('msg-status');
+
+        contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            document.getElementById('msg-status').style.display = 'block';
-            this.reset();
-            setTimeout(() => {
-                document.getElementById('msg-status').style.display = 'none';
-            }, 4000);
+
+            // Recopilar los datos del formulario
+            const formData = new FormData(this);
+
+            // Enviar datos a Netlify
+            fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(formData).toString()
+            })
+            .then(() => {
+                // Mostrar mensaje de éxito
+                msgStatus.style.display = 'block';
+                contactForm.reset();
+                
+                // Ocultar el mensaje después de 4 segundos
+                setTimeout(() => {
+                    msgStatus.style.display = 'none';
+                }, 4000);
+            })
+            .catch(error => {
+                console.error('Error al enviar formulario:', error);
+                msgStatus.textContent = 'Error al enviar. Intenta de nuevo.';
+                msgStatus.style.color = 'var(--primary-color)';
+                msgStatus.style.display = 'block';
+            });
         });
