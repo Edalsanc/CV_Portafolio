@@ -17,6 +17,24 @@
             setTheme(newTheme);
         });
 
+        // --- Menú Hamburguesa ---
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburgerMenu.addEventListener('click', () => {
+            hamburgerMenu.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Cerrar menú al hacer clic en un enlace
+        const navItems = document.querySelectorAll('.nav-links a');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                hamburgerMenu.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
         // --- Efecto Navbar ---
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
