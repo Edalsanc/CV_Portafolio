@@ -35,7 +35,7 @@
                 
                 if (elementTop < windowHeight - elementVisible) {
                     el.classList.add('active');
-                    const bars = el.querySelectorAll('.progress-bar');
+                    const bars = el.querySelectorAll('.progress-bar, .level-fill');
                     bars.forEach(bar => {
                         bar.style.width = bar.getAttribute('data-width');
                     });
